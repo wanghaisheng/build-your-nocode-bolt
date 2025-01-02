@@ -58,7 +58,7 @@ export const ChatIntro: React.FC = () => {
         >
           <Zap className="h-4 w-4 text-blue-500" />
           <span>
-            Built using <a href="https://github.com/stackblitz/bolt" target="_blank" rel="noopener noreferrer" className="underline text-blue-500 hover:text-blue-600">Bolt OSS</a>
+            Built using <a href="https://github.com/stackblitz/bolt.new" target="_blank" rel="noopener noreferrer" className="underline text-blue-500 hover:text-blue-600">Bolt OSS</a>
           </span>
         </motion.div>
       </motion.div>
