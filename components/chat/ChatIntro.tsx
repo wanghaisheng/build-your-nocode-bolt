@@ -49,7 +49,7 @@ export const ChatIntro: React.FC = () => {
           className="text-xl md:text-2xl text-gray-600 dark:text-muted mb-10 max-w-3xl mx-auto"
           variants={itemVariants}
         >
-          Chat with AI to build web apps. No coding required.<br></br> Deploy with a single click.
+          Chat with AI to build web apps. No coding required.
         </motion.p>
 
         <motion.div 
