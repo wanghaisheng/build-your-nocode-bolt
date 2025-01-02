@@ -1,0 +1,43 @@
+flowchart TD
+    A[Login/Register Page] -->|Authenticate| B[Dashboard]
+    B --> C[App Gallery]
+    B --> D[myJams]
+    B --> E[User Profile]
+    
+    C -->|Select App| F[App Preview]
+    F -->|Use As-Is| K[Deploy App]
+    F -->|Remix| G[AI Chat Interface]
+    
+    subgraph "AI Chat Interface"
+    G1[User Input]
+    G2[AI Suggestions]
+    G3[Live Preview]
+    G4[Apply Changes]
+    end
+    
+    G -->|Save Remixed App| H[Database]
+    
+    K -->|Save to myJams| H
+    
+    D -->|View/Edit| I[Saved Remixed App]
+    I -->|Further Remix| G
+    I -->|Use Current Version| K
+    
+    E -->|Update| J[User Settings]
+    J -->|Save| H
+    
+    H -->|Load Data| B
+    H -->|Load Data| D
+    H -->|Load Data| I
+    
+    subgraph "Developer Subdomain"
+    L[Developer Login]
+    M[Advanced AI Chat Interface]
+    N[App Generation]
+    O[Publish to appJam]
+    end
+    
+    L --> M
+    M --> N
+    N --> O
+    O -->|Add to Pre-made Apps| C

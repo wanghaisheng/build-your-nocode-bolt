@@ -1,0 +1,30 @@
+graph TD
+    A[Login/Register Page] -->|Authenticate| B[Dashboard]
+    B --> C[App Gallery]
+    B --> D[My Apps]
+    B --> E[User Profile]
+    
+    C -->|Select App| F[App Preview]
+    F -->|Use As-Is| K[Deploy App]
+    F -->|Customize| G[AI Customization Interface]
+    G -->|Save Changes| H[Database]
+    
+    K -->|Save to My Apps| H
+    
+    D -->|View/Edit| I[Saved App]
+    I -->|Further Customize| G
+    I -->|Use Current Version| K
+    
+    E -->|Update| J[User Settings]
+    J -->|Save| H
+    
+    H -->|Load Data| B
+    H -->|Load Data| D
+    H -->|Load Data| I
+    
+    subgraph "AI Customization Interface"
+    G1[Text Input for Changes]
+    G2[AI Suggestions]
+    G3[Live Preview]
+    G4[Apply Changes]
+    end
