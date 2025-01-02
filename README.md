@@ -1,15 +1,14 @@
 # BoltNext - AI-Powered Full Stack Web App Generator
 
-BoltNext is a cutting-edge application that allows you to build full-stack web applications using the power of AI. By simply chatting with the AI, you can generate code, sync with GitHub (coming soon), and deploy your applications with a single click (coming soon).
+BoltNext is a cutting-edge application that allows you to build full-stack web applications using the power of AI. By simply chatting with the AI.
 
-This project is a Next.js-based reimagining of [bolt.new](https://bolt.new), which was originally built using Vite and Remix. BoltNext aims to provide a similar experience with the benefits of Next.js and tailwind, such as server-side rendering and improved performance.
+This project is a Next.js-based reimagining of [bolt](https://github.com/stackblitz/bolt.new), which was originally built using Vite and Remix. BoltNext aims to provide a similar experience with the benefits of Next.js and tailwind, such as server-side rendering and improved performance.
 
 ## Features
 
 *   **AI-Powered Code Generation:** Chat with the AI to describe your desired application, and BoltNext will generate the necessary code.
+*   **Mobile Responsive:** Allow use of bolt on various screen sizes.
 *   **Full-Stack Development:** Build complete web applications, including frontend and backend components.
-*   **GitHub Integration:** Seamlessly sync your generated code with your GitHub repositories.
-*   **One-Click Deployment:** Deploy your applications with a single click.
 *   **Multiple AI Provider Support:** Choose from various AI providers like Anthropic, Google, and TogetherAI.
 *   **Interactive Chat Interface:** A user-friendly chat interface for interacting with the AI.
 *   **Customizable Sidebar:** A sidebar for navigation, model selection, and managing chat history.
@@ -88,7 +87,7 @@ This project is a Next.js-based reimagining of [bolt.new](https://bolt.new), whi
 
 The application uses environment variables for configuration. Create a `.env.local` file in the root directory and add your environment variables.
 
-**Note:** The `.gitignore` file is configured to track `.env.local` and ignore all other `.env*` files.
+**Note:** The `.gitignore` file is configured to track `.env.example` and ignore all other `.env*` files.
 
 ## To Do
 
@@ -102,7 +101,7 @@ The application uses environment variables for configuration. Create a `.env.loc
 
 ## Acknowledgements
 
-This project draws inspiration from and is a Next.js implementation of [bolt.new](https://bolt.new), originally developed using Vite and Remix. We also acknowledge and appreciate the contributions of [StackBlitz](https://stackblitz.com/), whose innovative platform has greatly influenced the development of this project.
+This project draws inspiration from and is a Next.js implementation of [bolt](https://github.com/stackblitz/bolt.new), originally developed using Vite and Remix. I also acknowledge and appreciate the contributions of [StackBlitz](https://stackblitz.com/), whose innovative platform has greatly influenced the development of this project.
 
 ## Learn More
 
