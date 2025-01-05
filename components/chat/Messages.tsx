@@ -52,7 +52,7 @@ export const Messages = React.forwardRef<HTMLDivElement, MessagesProps>((props: 
           })
         : null}
       {isStreaming && (
-        <DotsThreeOutline className="text-center w-full text-accent-foreground i-svg-spinners:3-dots-fade text-4xl mt-4"></DotsThreeOutline>
+        <svg xmlns="http://www.w3.org/2000/svg" className='mx-auto' width={48} height={48} viewBox="0 0 24 24"><circle cx={4} cy={12} r={3} fill="currentColor"><animate id="svgSpinners3DotsFade0" fill="freeze" attributeName="opacity" begin="0;svgSpinners3DotsFade1.end-0.25s" dur="0.75s" values="1;0.2"></animate></circle><circle cx={12} cy={12} r={3} fill="currentColor" opacity={0.4}><animate fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.15s" dur="0.75s" values="1;0.2"></animate></circle><circle cx={20} cy={12} r={3} fill="currentColor" opacity={0.3}><animate id="svgSpinners3DotsFade1" fill="freeze" attributeName="opacity" begin="svgSpinners3DotsFade0.begin+0.3s" dur="0.75s" values="1;0.2"></animate></circle></svg>
       )}
     </div>
   );

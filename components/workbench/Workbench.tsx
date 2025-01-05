@@ -99,10 +99,12 @@ export const Workbench = memo(({ chatStarted, isStreaming, className }: Workspac
   };
 
   useEffect(() => {
-    if (hasPreview) {
+    if (isStreaming) {
+      setSelectedView('editor');
+    } else if (hasPreview) {
       setSelectedView('preview');
     }
-  }, [hasPreview]);
+  }, [hasPreview, isStreaming]);
 
   useEffect(() => {
     workbenchStore.setDocuments(files);

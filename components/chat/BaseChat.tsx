@@ -1,6 +1,6 @@
 "use client"
 import type { Message } from 'ai';
-import React, { type RefCallback, useState } from 'react';
+import React, { type RefCallback, useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Messages } from './Messages';
 import { ChatInput } from './ChatInput';
@@ -52,6 +52,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
   ) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+  
+    useEffect(() => {
+      scrollToBottom();
+    }, [messages]);
 
     return (
       <div
@@ -115,9 +124,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       onVoiceInput={onVoiceInput}
                       isListening={isListening}
                     />
-                    <div className="bg-background">
-                      {/* Ghost Element */}
-                    </div>
+                    <div ref={messagesEndRef}/>
                   </div>
                 </div>
                 {!chatStarted &&

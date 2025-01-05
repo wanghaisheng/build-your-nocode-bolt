@@ -1,6 +1,6 @@
 import { google } from '@ai-sdk/google';
 import { createOpenAI } from "@ai-sdk/openai";
-import { anthropic } from '@ai-sdk/anthropic';
+import { createAnthropic } from '@ai-sdk/anthropic';
 import { streamText as _streamText, convertToCoreMessages } from 'ai';
 import { MAX_TOKENS } from './constants';
 import { getSystemPrompt } from '@/utils/prompts';
@@ -15,12 +15,6 @@ export interface ToolResult<Name extends string, Args, Result> {
 
 export type StreamingOptions = Omit<Parameters<typeof _streamText>[0], 'model'>;
 
-const together = createOpenAI({
-  apiKey: process.env.TOGETHER_API_KEY ?? "",
-  baseURL: "https://api.together.xyz/v1",
-});
-
-
 export function streamText({ messages, provider, ...options }: { messages: any, provider: Provider } & StreamingOptions) {
   const initialMessages = messages.slice(0, -1);
   const currentMessage = messages[messages.length - 1];
@@ -32,13 +26,16 @@ export function streamText({ messages, provider, ...options }: { messages: any, 
 
   switch (provider.type) {
     case ProviderType.ANTHROPIC:
-      model = createOpenAI({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" })(provider.model.id);
+      model = createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" })(provider.model.id);
       break;
     case ProviderType.GOOGLE:
       model = google(provider.model.id);
       break;
     case ProviderType.TOGETHER:
-      model = together(provider.model.id);
+      model = createOpenAI({ baseURL: "https://api.together.xyz/v1", apiKey: process.env.TOGETHER_API_KEY ?? "" })(provider.model.id);
+      break;
+    case ProviderType.XAI:
+      model = createOpenAI({ baseURL: "https://api.x.ai", apiKey: process.env.XAI_API_KEY ?? "" })(provider.model.id);
       break;
     default:
       model = google("gemini-2.0-flash-thinking-exp-1219");

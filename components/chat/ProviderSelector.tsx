@@ -8,6 +8,7 @@ import {
   togetherModels,
   anthropicModels,
   googleModels,
+  xAIModels,
 } from '@/lib/stores/provider';
 import {
   DropdownMenu,
@@ -67,6 +68,16 @@ export function ProviderSelector() {
             <DropdownMenuRadioItem
               key={model.id}
               value={JSON.stringify({ type: ProviderType.GOOGLE, model })}
+              className=""
+            >
+              {model.displayName}
+            </DropdownMenuRadioItem>
+          ))}
+          <DropdownMenuLabel className='pl-1 rounded-sm bg-secondary text-accent font-bold text-sm w-full'>xAI Models</DropdownMenuLabel>
+          {xAIModels.map((model) => (
+            <DropdownMenuRadioItem
+              key={model.id}
+              value={JSON.stringify({ type: ProviderType.XAI, model })}
               className=""
             >
               {model.displayName}

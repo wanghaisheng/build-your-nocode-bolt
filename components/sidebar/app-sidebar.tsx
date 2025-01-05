@@ -34,7 +34,7 @@ import { chatStore } from "@/lib/stores/chat"
 import { useStore } from "@nanostores/react"
 import { toast } from "react-toastify"
 import { useCallback, useEffect, useState } from "react"
-import { Notebook } from "@phosphor-icons/react"
+import { Heart, Notebook } from "@phosphor-icons/react"
 import { HistoryItem } from "./HistoryItem"
 import { DialogRoot, DialogButton, Dialog, DialogTitle, DialogDescription } from "../ui/OldDialog"
 import { binDates } from "./date-binning"
@@ -97,9 +97,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const data = {
     user: {
-      name: "kevisdev",
-      email: "kevisdev97@gmail.com",
-      avatar: "/replace.jpg",
+      name: "KevIsDev",
+      email: "madeby@kevisdev.tech",
+      avatar: "/replace-with-your-avatar.jpg",
     },
     navMain: [
       {
@@ -257,7 +257,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         title: "Github",
         url: "https://github.com/xKevIsDev/",
+        target: "_blank",
         icon: GithubLogo,
+      },
+      {
+        title: "Sponsor",
+        url: "https://github.com/sponsors/xKevIsDev/",
+        target: "_blank",
+        icon: Heart,
       },
       {
         title: "Support",
@@ -268,23 +275,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: "Feedback",
         url: "#",
         icon: Send,
-      },
-    ],
-    examples: [
-      {
-        name: "Featured",
-        url: "#",
-        icon: PartyPopper,
-      },
-      {
-        name: "Examples",
-        url: "#",
-        icon: Notebook,
-      },
-      {
-        name: "Favourites",
-        url: "#",
-        icon: StarIcon,
       },
     ],
   }
@@ -310,7 +300,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.examples} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
