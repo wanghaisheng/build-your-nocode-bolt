@@ -5,6 +5,8 @@ import { streamText, type StreamingOptions } from '@/lib/llm/stream-text';
 import SwitchableStream from '@/lib/llm/switchable-stream';
 import { type Provider } from '@/lib/stores/provider';
 
+export const runtime = "edge";
+
 export async function POST(request: NextRequest) {
   return chatAction(request);
 }
