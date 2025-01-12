@@ -58,8 +58,10 @@ export const Terminal = memo(
       const element = terminalElementRef.current;
       if (term && element) {
         term.open(element);
-        fitAddonRef.current?.fit();
-        onTerminalResize?.(term.cols, term.rows);
+        setTimeout(() => {
+          fitAddonRef.current?.fit();
+          onTerminalResize?.(term.cols, term.rows);
+        }, 50);
 
         const resizeObserver = new ResizeObserver(() => {
           fitAddonRef.current?.fit();
