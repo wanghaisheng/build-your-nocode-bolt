@@ -59,8 +59,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     };
   
     useEffect(() => {
-      scrollToBottom();
-    }, [messages]);
+      if (isStreaming) { // Only scroll to bottom if isStreaming is true
+        scrollToBottom();
+      }
+    }, [messages, isStreaming]);
 
     return (
       <div
