@@ -8,6 +8,8 @@ import { ChatIntro } from './ChatIntro';
 import { ChatExamples } from './ChatExamples';
 import { Workbench } from '@/components/workbench/Workbench';
 import { CaretDown } from '@phosphor-icons/react';
+import ChatAlert from './ChatAlert';
+import { ActionAlert } from '@/types/actions';
 
 interface BaseChatProps {
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
@@ -26,6 +28,8 @@ interface BaseChatProps {
   enhancePrompt?: () => void;
   onVoiceInput?: () => void;
   isListening?: boolean;
+  actionAlert?: ActionAlert;
+  clearAlert?: () => void;
 }
 
 export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
@@ -47,6 +51,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       handleStop,
       onVoiceInput,
       isListening,
+      actionAlert,
+      clearAlert,
     },
     ref,
   ) => {
@@ -113,6 +119,18 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       { 'sticky bottom-0': chatStarted }
                     )}
                   >
+                    <div className=" mb-2">
+                      {actionAlert && (
+                        <ChatAlert
+                          alert={actionAlert}
+                          clearAlert={() => clearAlert?.()}
+                          postMessage={(message) => {
+                            sendMessage?.({} as any, message);
+                            clearAlert?.();
+                          }}
+                        />
+                      )}
+                    </div>
                     <ChatInput
                       textareaRef={textareaRef}
                       input={input}

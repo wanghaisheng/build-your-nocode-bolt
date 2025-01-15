@@ -76,13 +76,10 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const baseChatRef = useRef<HTMLDivElement>(null);
-
+  const actionAlert = useStore(workbenchStore.alert);
   const [chatStarted, setChatStarted] = useState(initialMessages.length > 0);
-
   const { showChat } = useStore(chatStore);
-
   const [animationScope, animate] = useAnimate();
-
   const provider = useStore(providerStore);
   const { toast } = useToast();
 
@@ -320,6 +317,8 @@ export const ChatImpl = memo(({ initialMessages, storeMessageHistory }: ChatProp
           scrollTextArea();
         });
       }}
+      actionAlert={actionAlert}
+      clearAlert={() => workbenchStore.clearAlert()}
     />
   );
 });

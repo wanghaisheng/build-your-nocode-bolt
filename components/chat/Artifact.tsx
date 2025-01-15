@@ -55,7 +55,7 @@ export const Artifact = memo(({ messageId }: ArtifactProps) => {
               <Browsers className='text-lg' />
             <div className="w-full text-accent font-medium leading-5 text-sm">{artifact?.title}</div>
             </div>
-            <div className="w-full text-muted text-xs mt-0.5">Click to open artifact</div>
+            <div className="w-full text-muted-foreground text-xs mt-0.5">Click to open artifact</div>
           </div>
         </button>
         <AnimatePresence>
@@ -134,13 +134,13 @@ const ActionList = memo(({ actions }: ActionListProps) => {
                     {type !== 'start' ? (
                       <LoaderCircle className='animate-spin'/>
                     ) : (
-                      <Terminal/>
+                      <Terminal weight='bold' className='text-primary'/>
                     )}
                   </>
                   ) : status === 'pending' ? (
                      <LoaderCircle className='animate-spin'/>
                   ) : status === 'complete' ? (
-                    <Check/>
+                    <Check className=''/>
                   ) : status === 'failed' || status === 'aborted' ? (
                     <X/>
                   ) : null}

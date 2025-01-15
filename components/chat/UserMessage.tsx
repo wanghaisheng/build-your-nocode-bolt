@@ -1,3 +1,4 @@
+import { modificationsRegex } from '@/utils/diff';
 import { Markdown } from './Markdown';
 
 interface UserMessageProps {
@@ -35,7 +36,7 @@ export function UserMessage({ content, data }: UserMessageProps) {
 
   return (
     <div className="overflow-hidden flex gap-2 items-start justify-between">
-      <Markdown limitedMarkdown>{content}</Markdown>
+      <Markdown limitedMarkdown>{sanitizeUserMessage(content)}</Markdown>
       {imageUrl && (
         <div className="relative min-w-44 max-w-44 bg-background opacity-70 border rounded-lg p-2 flex items-center gap-2 overflow-hidden">
           <div className="relative min-w-8 h-8">
@@ -53,4 +54,8 @@ export function UserMessage({ content, data }: UserMessageProps) {
       )}
     </div>
   );
+}
+
+function sanitizeUserMessage(content: string) {
+  return content.replace(modificationsRegex, '').trim();
 }

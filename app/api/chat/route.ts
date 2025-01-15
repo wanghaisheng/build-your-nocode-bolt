@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { MAX_RESPONSE_SEGMENTS, MAX_TOKENS } from '@/lib/llm/constants';
-import { CONTINUE_PROMPT } from '@/utils/prompts';
+import { CONTINUE_PROMPT } from '@/lib/llm/prompts';
 import { streamText, type StreamingOptions } from '@/lib/llm/stream-text';
 import SwitchableStream from '@/lib/llm/switchable-stream';
 import { type Provider } from '@/lib/stores/provider';
@@ -15,6 +15,7 @@ async function chatAction(request: NextRequest) {
   const { messages, provider } = await request.json() as { messages: any, provider: Provider };
 
   const stream = new SwitchableStream();
+  const startTime = Date.now();
 
   try {
     const options: StreamingOptions = {
@@ -44,6 +45,10 @@ async function chatAction(request: NextRequest) {
     const result = await streamText({ messages, provider, ...options });
 
     stream.switchSource(result.toDataStream());
+
+    const endTime = Date.now();
+        const executionTime = endTime - startTime;
+        console.log(`API execution time: ${executionTime}ms`);
 
     return new NextResponse(stream.readable, {
       status: 200,

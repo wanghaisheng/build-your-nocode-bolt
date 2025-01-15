@@ -29,6 +29,7 @@ export interface ParserCallbacks {
   onArtifactClose?: ArtifactCallback;
   onActionOpen?: ActionCallback;
   onActionClose?: ActionCallback;
+  onActionStream?: ActionCallback;
 }
 
 interface ElementFactoryProps {

@@ -33,11 +33,15 @@ const messageParser = new StreamingMessageParser({
     onActionClose: (data: ActionCallbackData) => {
       logger.trace('onActionClose', data.action);
 
-      if (data.action.type === 'shell') {
+      if (data.action.type === 'shell' || data.action.type === 'start') {
         workbenchStore.addAction(data);
       }
 
       workbenchStore.runAction(data);
+    },
+    onActionStream: (data) => {
+      logger.trace('onActionStream', data.action);
+      workbenchStore.runAction(data, true);
     },
   },
 });
@@ -47,7 +51,6 @@ export function useMessageParser() {
 
   const parseMessages = useCallback((messages: Message[], isLoading: boolean) => {
     let reset = false;
-    console.log('messages:', messages);
 
     if (process.env.NODE_ENV === 'development' && !isLoading) {
       reset = true;

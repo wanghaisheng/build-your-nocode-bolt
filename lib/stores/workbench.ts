@@ -11,12 +11,17 @@ import { EditorStore } from './editor';
 import { FilesStore, type FileMap } from './files';
 import { PreviewsStore } from './previews';
 import { TerminalStore } from './terminal';
+import type { ActionAlert } from '@/types/actions';
+import { createSampler } from '@/utils/sampler';
+import { WebContainer } from '@webcontainer/api';
+import path from 'path';
 
 export interface ArtifactState {
   id: string;
   title: string;
   closed: boolean;
   runner: ActionRunner;
+  type?: string;
 }
 
 export type ArtifactUpdateState = Pick<ArtifactState, 'title' | 'closed'>;
@@ -30,6 +35,11 @@ export class WorkbenchStore {
   private filesStore = new FilesStore(webcontainer);
   private editorStore = new EditorStore(this.filesStore);
   private terminalStore = new TerminalStore(webcontainer);
+  actionAlert: WritableAtom<ActionAlert | undefined> = atom<ActionAlert | undefined>(
+    (typeof window !== 'undefined' && (window as any).__NEXT_HMR_DATA__?.actionAlert) ?? undefined
+  );
+  webcontainer: Promise<WebContainer>;
+  reloadedMessages = new Set<string>();
 
   artifacts: Artifacts = map({});
   showWorkbench: WritableAtom<boolean> = atom(false);
@@ -37,8 +47,10 @@ export class WorkbenchStore {
   unsavedFiles: WritableAtom<Set<string>> = atom(new Set<string>());
   modifiedFiles = new Set<string>();
   artifactIdList: string[] = [];
+  globalExecutionQueue = Promise.resolve();
 
-  constructor() {
+  constructor(webcontainerPromise: Promise<WebContainer>) {
+    this.webcontainer = webcontainerPromise;
     if (process.env.NODE_ENV === 'development') {
       this.setupHotReload();
     }
@@ -52,12 +64,17 @@ export class WorkbenchStore {
         unsavedFiles: this.unsavedFiles,
         showWorkbench: this.showWorkbench,
         currentView: this.currentView,
+        actionAlert: this.actionAlert,
       };
     }
   }
 
   get previews() {
     return this.previewsStore.previews;
+  }
+
+  addToExecutionQueue(callback: () => Promise<void>) {
+    this.globalExecutionQueue = this.globalExecutionQueue.then(() => callback());
   }
 
   get files() {
@@ -85,6 +102,13 @@ export class WorkbenchStore {
   }
   get boltnextTerminal() {
     return this.terminalStore.boltnextTerminal;
+  }
+
+  get alert() {
+    return this.actionAlert;
+  }
+  clearAlert() {
+    this.actionAlert.set(undefined);
   }
 
   toggleTerminal(value?: boolean) {
@@ -170,6 +194,10 @@ export class WorkbenchStore {
     this.editorStore.setSelectedFile(filePath);
   }
 
+  setReloadedMessages(messages: string[]) {
+    this.reloadedMessages = new Set(messages);
+  }
+
   async saveFile(filePath: string) {
     const documents = this.editorStore.documents.get();
     const document = documents[filePath];
@@ -231,7 +259,7 @@ export class WorkbenchStore {
     // TODO: implement abort all actions
   }
 
-  addArtifact({ messageId, title, id }: ArtifactCallbackData) {
+  addArtifact({ messageId, title, id, type }: ArtifactCallbackData) {
     const artifact = this.getArtifact(messageId);
 
     if (artifact) {
@@ -246,7 +274,18 @@ export class WorkbenchStore {
       id,
       title,
       closed: false,
-      runner: new ActionRunner(webcontainer, () => this.boltnextTerminal),
+      type,
+      runner: new ActionRunner(
+        webcontainer,
+        () => this.boltnextTerminal,
+        (alert) => {
+          if (this.reloadedMessages.has(messageId)) {
+            return;
+          }
+
+          this.actionAlert.set(alert);
+        },
+      ),
     });
   }
 
@@ -272,7 +311,7 @@ export class WorkbenchStore {
     artifact.runner.addAction(data);
   }
 
-  async runAction(data: ActionCallbackData) {
+  async allInOneAction(data: ActionCallbackData) {
     const { messageId } = data;
 
     const artifact = this.getArtifact(messageId);
@@ -281,8 +320,63 @@ export class WorkbenchStore {
       unreachable('Artifact not found');
     }
 
+    artifact.runner.addAction(data);
     artifact.runner.runAction(data);
   }
+
+  runAction(data: ActionCallbackData, isStreaming: boolean = false) {
+    if (isStreaming) {
+      this.actionStreamSampler(data, isStreaming);
+    } else {
+      this.addToExecutionQueue(() => this._runAction(data, isStreaming));
+    }
+  }
+
+  async _runAction(data: ActionCallbackData, isStreaming: boolean = false) {
+    const { messageId } = data;
+
+    const artifact = this.getArtifact(messageId);
+
+    if (!artifact) {
+      unreachable('Artifact not found');
+    }
+
+    const action = artifact.runner.actions.get()[data.actionId];
+
+    if (!action || action.executed) {
+      return;
+    }
+
+    if (data.action.type === 'file') {
+      const wc = await webcontainer;
+  
+      const fullPath = path.resolve(wc.workdir, data.action.filePath);
+
+      if (this.selectedFile.value !== fullPath) {
+        this.setSelectedFile(fullPath);
+      }
+
+      const doc = this.editorStore.documents.get()[fullPath];
+
+      if (!doc) {
+        await artifact.runner.runAction(data, isStreaming);
+      }
+
+      this.editorStore.updateFile(fullPath, data.action.content);
+
+      if (!isStreaming) {
+        await artifact.runner.runAction(data);
+        this.resetAllFileModifications();
+      }
+    } else {
+      await artifact.runner.runAction(data);
+    }
+  }
+
+  actionStreamSampler = createSampler(async (data: ActionCallbackData, isStreaming: boolean = false) => {
+    return await this._runAction(data, isStreaming);
+  }, 100); // TODO: remove this magic number to have it configurable
+
 
   private getArtifact(id: string) {
     const artifacts = this.artifacts.get();
@@ -295,7 +389,7 @@ let workbenchStoreInstance: WorkbenchStore | null = null;
 
 export function getWorkbenchStore(): WorkbenchStore {
   if (!workbenchStoreInstance) {
-    workbenchStoreInstance = new WorkbenchStore();
+    workbenchStoreInstance = new WorkbenchStore(webcontainer);
   }
   return workbenchStoreInstance;
 }
