@@ -63,6 +63,7 @@ export const anthropicModels: AnthropicModel[] = [
 export const googleModels: GoogleModel[] = [
   { id: 'gemini-2.0-flash-exp', displayName: 'Gemini 2.0 Flash' },
   { id: 'gemini-2.0-flash-thinking-exp-1219', displayName: 'Gemini 2.0 Flash Thinking' },
+  { id: 'gemini-2.5-flash-preview-04-17'. displayName" 'Gemini 2.5 Flash Preview'}
 ];
 
 export const xAIModels: XAIModel[] = [
