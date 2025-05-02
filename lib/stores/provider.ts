@@ -5,7 +5,7 @@ export type AnthropicModel = {
   displayName: string;
 };
 export type GoogleModel = {
-  id: 'gemini-2.0-flash-exp' | 'gemini-2.0-flash-thinking-exp-1219';
+  id: 'gemini-2.0-flash-exp' | 'gemini-2.0-flash-thinking-exp-1219' | 'gemini-2.5-flash-preview-04-17';
   displayName: string;
 };
 
