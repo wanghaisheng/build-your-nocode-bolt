@@ -1,3 +1,4 @@
+export const runtime = 'edge';
 'use client';
 
 import Chat from '@/components/chat/Chat';
