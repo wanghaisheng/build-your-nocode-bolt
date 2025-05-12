@@ -1,19 +1,19 @@
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { SidebarInset } from '@/components/ui/sidebar'
 import './globals.css'
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 import { AppSidebar } from '@/components/sidebar/app-sidebar'
 import '@xterm/xterm/css/xterm.css';
-import localFont from 'next/font/local';
+// import localFont from 'next/font/local';
 import { Toaster } from '@/components/ui/toaster'
 import BeautifulBackground from './background'
 
-const paytoneOne = localFont({
-  src: './fonts/PaytoneOne.ttf',
-  display: 'swap',
-});
+// const paytoneOne = localFont({
+  // src: './fonts/PaytoneOne.ttf',
+  // display: 'swap',
+// });
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'BoltNext',
@@ -30,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} ${paytoneOne.className}`}>
+      <body>
       <SidebarProvider className='max-h-[100vh]'>
       <AppSidebar className=''/>
       <SidebarInset>
